@@ -2,6 +2,9 @@ def gv
     
 pipeline {
     agent any
+    tools {
+        maven 'maven-3.6' //from the tools configartion
+    }
     parameters{
         choice(name: 'VERSION',choices: ['1.0.0', '1.0.1', '1.0.2'],description: 'Select A specific version')
         booleanParam( name: 'executetests',defaultValue: true,description: 'Execute / skip test stage' )   
