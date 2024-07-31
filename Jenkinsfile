@@ -2,9 +2,11 @@ def gv
     
 pipeline {
     agent any
-    tools {
-        maven 'maven-3.6' //from the tools configartion
+    parameters{
+        choice(name: 'VERSION',choices: ['1.0.0', '1.0.1', '1.0.2'],description: 'Select A specific version')
+        booleanparam(name: 'executetests',defaultvalue: true ,description: 'execute / skip test stage')
     }
+ 
     stages {
         stage("init") {
             steps {
@@ -17,7 +19,7 @@ pipeline {
             steps {
                 script {
                     echo "building jar"
-                    //gv.buildJar()
+                    gv.buildJar()
                 }
             }
         }
@@ -25,15 +27,22 @@ pipeline {
             steps {
                 script {
                     echo "building image"
-                    //gv.buildImage()
+                    gv.buildImage()
                 }
             }
         }
         stage("deploy") {
+            input{
+                message "select env to deploy app"
+                ok "OK"
+                parameters{
+                    choice(name: 'ENV',choices: ['dev', 'stagging', 'production'],description: 'Select the env you want to deploy to')
+                }
+            }
             steps {
                 script {
-                    echo "deploying"
-                    //gv.deployApp()
+                    echo "deploying the version ${params.VERSION} and env ${ENV}"
+                    gv.deployApp()
                 }
             }
         }
