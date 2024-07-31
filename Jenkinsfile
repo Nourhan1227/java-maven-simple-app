@@ -4,9 +4,8 @@ pipeline {
     agent any
     parameters{
         choice(name: 'VERSION',choices: ['1.0.0', '1.0.1', '1.0.2'],description: 'Select A specific version')
-        booleanparam(name: 'executetests',defaultvalue: true ,description: 'execute / skip test stage')
+        booleanParam( name: 'executetests',defaultValue: true,description: 'Execute / skip test stage' )   
     }
- 
     stages {
         stage("init") {
             steps {
